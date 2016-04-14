@@ -40,9 +40,6 @@
  * \asf_license_stop
  *
  */
-/*
- * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
- */
 
 #ifndef _CONF_USB_H_
 #define _CONF_USB_H_
@@ -55,6 +52,8 @@
  */
 
 //! Device definition (mandatory)
+
+// Use the test vendor ID
 #define  USB_DEVICE_VENDOR_ID             0x6666
 #define  USB_DEVICE_PRODUCT_ID            0x4825
 #define  USB_DEVICE_MAJOR_VERSION         1
@@ -112,12 +111,13 @@
  * @{
  */
 //! Interface callback definition
-#define  UDI_HID_KBD_ENABLE_EXT()       true
-#define  UDI_HID_KBD_DISABLE_EXT()
-// #define UDI_HID_KBD_ENABLE_EXT() my_callback_keyboard_enable()
-// extern bool my_callback_keyboard_enable(void);
-// #define UDI_HID_KBD_DISABLE_EXT() my_callback_keyboard_disable()
-// extern void my_callback_keyboard_disable(void);
+
+#define UDI_HID_KBD_ENABLE_EXT() keyboardEnableCallback()
+extern bool keyboardEnableCallback(void);
+
+#define UDI_HID_KBD_DISABLE_EXT() keyboardDisableCallback()
+extern void keyboardDisableCallback(void);
+
 #define  UDI_HID_KBD_CHANGE_LED(value)
 // #define  UDI_HID_KBD_CHANGE_LED(value) my_callback_keyboard_led(value)
 // extern void my_callback_keyboard_led(uint8_t value)
