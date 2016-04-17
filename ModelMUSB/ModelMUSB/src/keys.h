@@ -26,32 +26,60 @@
 #define DUE44 IOPORT_CREATE_PIN(PIOC, 19)
 #define DUE45 IOPORT_CREATE_PIN(PIOC, 18)
 
-const int ROWPINCOUNT = 15;
-const int COLUMNPINCOUNT = 8;
+#define ROWPINCOUNT 16
+#define COLUMNPINCOUNT 8
 
 uint32_t rowPins[] = {DUE22, DUE23, DUE24, DUE25, DUE26, DUE27, DUE28, DUE29, DUE30, DUE31, DUE32, DUE33, DUE34, DUE35, DUE36, DUE37};
 
 uint32_t columnPins[] = {DUE38, DUE39, DUE40, DUE41, DUE42, DUE43, DUE44, DUE45};
 
-const unsigned int keyMap[15][8] = {
+void pressKey(int pressedKey);
+void releaseKey(int releasedKey);
+
+void pressModifier(int pressModifier);
+void releaseModifier(int releaseModifier);
+
+const unsigned int keyMap[ROWPINCOUNT][COLUMNPINCOUNT] = {
 {0,0,0,0,0,0,0,0},
 {0,0,0,0,0,0,0,0},
-{HID_ESCAPE, HID_TAB,       0,      HID_1, HID_Q, HID_A, HID_Z, 0},
-{0,          HID_CAPS_LOCK, HID_F1, HID_2, HID_W, HID_S, HID_X, 0},
-{HID_F4,     HID_F3,        HID_F2, HID_3, HID_E, HID_D, HID_C, 0},
-{0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0},
-{0,0,0,0,0,0,0,0}
+{HID_ESCAPE, HID_TAB,           HID_TILDE, HID_1,   HID_Q, HID_A, HID_Z,     0},
+{0,          HID_CAPS_LOCK,     HID_F1,    HID_2,   HID_W, HID_S, HID_X,     0},
+{HID_F4,     HID_F3,            HID_F2,    HID_3,   HID_E, HID_D, HID_C,     0},
+{HID_G,      HID_T,             HID_5,     HID_4,   HID_R, HID_F, HID_V,     HID_B},
+{HID_F5,     HID_BACKSPACE,     HID_F9,    HID_F10, 0,     0,     HID_ENTER, HID_SPACEBAR},
+{HID_H,      HID_Y,             HID_6,     HID_7,   HID_U, HID_J, HID_M,     HID_N},
+{HID_F6,     HID_CLOSE_BRACKET, HID_PLUS,  HID_8,   HID_I, HID_K, HID_COMMA, 0},
+{0,          HID_F7,            HID_F8,    HID_9,   HID_O, HID_L, HID_DOT,   0},
+{0, HID_OPEN_BRACKET, HID_UNDERSCORE, HID_0, HID_P, HID_COLON, 0, HID_SLASH},
+{0, 0, HID_DELETE, HID_F11, 0,0, HID_KEYPAD_NUM_LOCK, HID_DOWN},
+{0, 0,HID_INSERT ,0,0,0,0, HID_RIGHT},
+{0, 0,HID_PAGEUP, HID_PAGEDOWN,0,0,0,0},
+{HID_UP, 0, HID_HOME, HID_END, 0, 0, HID_PAUSE, HID_LEFT},
+{0, 0, 0, HID_PRINTSCREEN, HID_SCROLL_LOCK, 0,0,0}
 };
 
-bool stateMap[15][8] = {
+
+const unsigned int modifierMap[ROWPINCOUNT][COLUMNPINCOUNT] = {
+	{0, 0,                       HID_MODIFIER_LEFT_CTRL, 0, 0,    HID_MODIFIER_RIGHT_CTRL,  0},
+	{0, HID_MODIFIER_LEFT_SHIFT, 0,                      0, 0, 0, HID_MODIFIER_RIGHT_SHIFT, 0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{0,0,0,0,0,0,0,0},
+	{HID_MODIFIER_LEFT_ALT, 0, 0, 0, 0, 0, 0, HID_MODIFIER_RIGHT_ALT}
+};
+
+bool stateMap[ROWPINCOUNT][COLUMNPINCOUNT] = {
+	{false,false,false,false,false,false,false,false},
 	{false,false,false,false,false,false,false,false},
 	{false,false,false,false,false,false,false,false},
 	{false,false,false,false,false,false,false,false},
@@ -67,6 +95,7 @@ bool stateMap[15][8] = {
 	{false,false,false,false,false,false,false,false},
 	{false,false,false,false,false,false,false,false},
 	{false,false,false,false,false,false,false,false}
+
 };
 
 bool keyboardEnabledFlag = true;

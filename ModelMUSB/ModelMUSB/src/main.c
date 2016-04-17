@@ -11,9 +11,20 @@
 #include <asf.h>
 #include <keys.h>
 
-void pressKey(int pressedKey);
-void releaseKey(int releasedKey);
+void pressModifier(int pressedModifier) {
+	if (!keyboardEnabledFlag) {
+		return;
+	}
+	udi_hid_kbd_modifier_down(pressedModifier);
+}
 
+void releaseModifier(int releaseModifier)
+{
+	if ((!keyboardEnabledFlag)) {
+		return;
+	}
+	udi_hid_kbd_modifier_up(releaseModifier);
+}
 
 bool keyboardEnableCallback(void)
 {
@@ -55,44 +66,54 @@ int main (void)
 
 	/* Main application code */
 	
+	//Set the column pins as inputs
+	for (int columnPin = 0; columnPin < COLUMNPINCOUNT; columnPin++) {
+		ioport_set_pin_dir(columnPins[columnPin], IOPORT_DIR_INPUT);
+	}
 
-	//Start the USB HID service
+	// Start the USB HID service
 	udc_start();
 	bool scanValue;
 	while (1) 
 	{
-		/* This code updates the stateMap array */
-		for (int rowPinOutput = 0; rowPinOutput <= ROWPINCOUNT; rowPinOutput++) 
+		// Cycle through the row pins, designating one as output
+		for (int rowPinOutput = 0; rowPinOutput < ROWPINCOUNT; rowPinOutput++) 
 		{
-			for (int rowPin = 0; rowPin <= ROWPINCOUNT; rowPin++) 
+			// Set all of the row pins as inputs
+			for (int rowPin = 0; rowPin < ROWPINCOUNT; rowPin++) 
 			{
 				ioport_set_pin_dir(rowPins[rowPin], IOPORT_DIR_INPUT);
 			}
 
+			//Set the designated pin as low outputs
 			ioport_set_pin_dir(rowPins[rowPinOutput], IOPORT_DIR_OUTPUT);
 			ioport_set_pin_level(rowPins[rowPinOutput], IOPORT_PIN_LEVEL_LOW);
 
-			for (int columnReadPin = 0; columnReadPin <= COLUMNPINCOUNT; columnReadPin++)
-			{
-				for (int columnPin = 0; columnPin <= COLUMNPINCOUNT; columnPin++)
-				{
-					ioport_set_pin_dir(columnPins[columnPin], IOPORT_DIR_INPUT);
-				}
-				scanValue = ioport_get_pin_level(columnPins[columnReadPin]);
-				if (!scanValue) {
-					stateMap[rowPinOutput][columnReadPin] = true;
-				} else {
-					stateMap[rowPinOutput][columnReadPin] = false;
-				}
-			}
-		}
-		
-		for (int stateRow = 0; stateRow <= ROWPINCOUNT; stateRow++) {
-			for (int stateColumn = 0; stateColumn <= COLUMNPINCOUNT; stateColumn++) {
-				if (stateMap[stateRow][stateColumn]) {
-					pressKey(keyMap[stateRow][stateColumn]);
-				} else {
-					releaseKey(keyMap[stateRow][stateColumn]);
+			// Cycle through column pins
+			for (int columnReadPin = 0; columnReadPin < COLUMNPINCOUNT; columnReadPin++) {
+				
+				// Get the value of the column pin
+				scanValue = !ioport_get_pin_level(columnPins[columnReadPin]);
+
+				// If the saved state differs from the recorded state
+				if (stateMap[rowPinOutput][columnReadPin] != scanValue) {
+					
+					// Update the state
+					stateMap[rowPinOutput][columnReadPin] = scanValue;
+
+					if (stateMap[rowPinOutput][columnReadPin]) {
+						if (modifierMap[rowPinOutput][columnReadPin] == 0) {
+							pressKey(keyMap[rowPinOutput][columnReadPin]);
+						} else {
+							pressModifier(keyMap[rowPinOutput][columnReadPin]);
+						}
+					} else {
+						if (modifierMap[rowPinOutput][columnReadPin] == 0) {
+							releaseKey(keyMap[rowPinOutput][columnReadPin]);
+						} else {
+							releaseModifier(keyMap[rowPinOutput][columnReadPin]);
+						}
+					}
 				}
 			}
 		}	
