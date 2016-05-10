@@ -50,9 +50,9 @@ void keyboardDisableCallback(void) {
 }
 
 void ledCallback(uint8_t value) {
-	ioport_set_pin_level(numlockLed, (value != HID_LED_NUM_LOCK));
-	ioport_set_pin_level(capslockLed, (value != HID_LED_CAPS_LOCK));
-	ioport_set_pin_level(scrolllockLed, (value != HID_LED_SCROLL_LOCK));
+	ioport_set_pin_level(numlockLed, !(value & HID_LED_NUM_LOCK));
+	ioport_set_pin_level(capslockLed, !(value & HID_LED_CAPS_LOCK));
+	ioport_set_pin_level(scrolllockLed, !(value & HID_LED_SCROLL_LOCK));
 }
 
 int main(void) {
