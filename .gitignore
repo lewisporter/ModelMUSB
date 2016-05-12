@@ -1,7 +1,10 @@
 .vs
+Board/History
+Board/__Previews
 ModelMUSB/Debug
 ModelMUSB/Release
 ModelMUSB/jlink.log
+jlink.log
 
 # Windows image file caches
 Thumbs.db

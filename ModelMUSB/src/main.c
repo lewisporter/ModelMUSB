@@ -67,6 +67,9 @@ int main(void) {
 
     /* Main application code */
 
+
+	/* INITIALISE PINS */
+	
     //Set the column pins as inputs
     for (int columnPin = 0; columnPin < COLUMNPINCOUNT; columnPin++) {
         ioport_set_pin_dir(columnPins[columnPin], IOPORT_DIR_INPUT);
@@ -77,10 +80,15 @@ int main(void) {
 		ioport_set_pin_dir(ledPins[ledPin], IOPORT_DIR_OUTPUT);
 	}
 
+
+
+
     // Start the USB HID service
     udc_start();
 
-    while (1) {
+
+	//Infinite loop
+    for (;;) {
         // Cycle through the row pins, designating one as output
         for (int rowPinOutput = 0; rowPinOutput < ROWPINCOUNT; rowPinOutput++) {
             // Set all of the row pins as inputs
@@ -96,26 +104,25 @@ int main(void) {
             for (int columnReadPin = 0; columnReadPin < COLUMNPINCOUNT; columnReadPin++) {
 
                 // Get the value of the column pin
-                scanValue = (int) !ioport_get_pin_level(columnPins[columnReadPin]);
-
+                scanValue = ioport_get_pin_level(columnPins[columnReadPin]);
+				scanValue = !scanValue;
+				
                 // If the saved state differs from the recorded state
                 if (stateMap[rowPinOutput][columnReadPin] != scanValue) {
-					delay_ms(DEBOUNCE_DELAY);
 						
-                    // Update the state
+                    // Update the stateMap
                     stateMap[rowPinOutput][columnReadPin] = scanValue;
+					
+					//Debounce
+					delay_ms(DEBOUNCE_DELAY);
+					
+					//Presses/releases the key. Each key only has effect with respective function.
                     if (stateMap[rowPinOutput][columnReadPin]) {
-                        if (modifierMap[rowPinOutput][columnReadPin] == 0) {
 							pressKey(keyMap[rowPinOutput][columnReadPin]);
-                        } else {
                             pressModifier(modifierMap[rowPinOutput][columnReadPin]);
-                        }
                     } else {
-                        if (modifierMap[rowPinOutput][columnReadPin] == 0) {
                             releaseKey(keyMap[rowPinOutput][columnReadPin]);
-                        } else {
                             releaseModifier(modifierMap[rowPinOutput][columnReadPin]);
-                        }
                     }
                 }
             }
