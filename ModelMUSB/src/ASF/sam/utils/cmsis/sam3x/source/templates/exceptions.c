@@ -229,7 +229,6 @@ void CAN1_Handler       ( void ) __attribute__ ((weak, alias("Dummy_Handler")));
  */
 void Dummy_Handler(void)
 {
-
 	while (1) {
 	}
 }

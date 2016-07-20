@@ -317,4 +317,4 @@ COMPILER_PACK_RESET()
 #define  HID_LED_KANA               (1<<4)
 //! @}
 
-#endif // _USB_PROTOCOL_HID_H
+#endif // _USB_PROTOCOL_HID_H_
