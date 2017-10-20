@@ -96,26 +96,6 @@ const unsigned int modifierMap[ROWPINCOUNT][COLUMNPINCOUNT] = {
 };
 
 
-bool stateMap[ROWPINCOUNT][COLUMNPINCOUNT] = {
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false},
-	{false,false,false,false,false,false,false,false}
-
-};
-
 bool keyboardEnabledFlag = true;
 bool scanValue;
 #endif

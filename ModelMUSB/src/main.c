@@ -97,25 +97,18 @@ int main(void) {
                 // Get the value of the column pin
                 scanValue = ioport_get_pin_level(columnPins[columnReadPin]);
 				scanValue = !scanValue;
-				
-                // If the saved state differs from the recorded state
-                if (stateMap[rowPinOutput][columnReadPin] != scanValue) {
-						
-                    // Update the stateMap
-                    stateMap[rowPinOutput][columnReadPin] = scanValue;
 					
 					//Debounce
 					delay_ms(DEBOUNCE_DELAY);
 					
 					//Presses/releases the key. Each key only has effect with respective function.
-                    if (stateMap[rowPinOutput][columnReadPin]) {
+                    if (scanValue) {
 							pressKey(keyMap[rowPinOutput][columnReadPin]);
                             pressModifier(modifierMap[rowPinOutput][columnReadPin]);
                     } else {
                             releaseKey(keyMap[rowPinOutput][columnReadPin]);
                             releaseModifier(modifierMap[rowPinOutput][columnReadPin]);
                     }
-                }
             }
         }
     }
