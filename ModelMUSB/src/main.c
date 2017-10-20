@@ -57,16 +57,14 @@ void ledCallback(uint8_t value) {
 
 int main(void) {
     /* Initialise the board */
-    sysclk_init();
-    irq_initialize_vectors();
-    cpu_irq_enable();
-    board_init();
-    sleepmgr_init();
-    board_init();
-    ioport_init();
+	sysclk_init();
+	irq_initialize_vectors();
+	cpu_irq_enable();
+	board_init();
 
     /* Main application code */
 
+	udc_start();
 
 	/* INITIALISE PINS */
 	
@@ -79,13 +77,6 @@ int main(void) {
 	for (int ledPin = 0; ledPin < LEDPINCOUNT; ledPin++) {
 		ioport_set_pin_dir(ledPins[ledPin], IOPORT_DIR_OUTPUT);
 	}
-
-
-
-
-    // Start the USB HID service
-    udc_start();
-
 
 	//Infinite loop
     for (;;) {

@@ -49,6 +49,7 @@
 
 #include "compiler.h"
 
+
 /**
  * USB Device Configuration
  * @{
@@ -64,7 +65,6 @@
 #define  USB_DEVICE_POWER                 100 // Consumption on Vbus line (mA)
 #define  USB_DEVICE_ATTR                  USB_CONFIG_ATTR_BUS_POWERED
 
-
 //! USB Device string definitions (Optional)
 #define  USB_DEVICE_MANUFACTURE_NAME      "Lewis Porter"
 #define  USB_DEVICE_PRODUCT_NAME          "ModelMUSB"
@@ -74,6 +74,9 @@
  * Device speeds support
  * @{
  */
+//! To define a Low speed device
+//#define  USB_DEVICE_LOW_SPEED
+
 //! To authorize the High speed
 #if (UC3A3||UC3A4)
 //#define  USB_DEVICE_HS_SUPPORT
